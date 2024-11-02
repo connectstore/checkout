@@ -194,21 +194,21 @@
                 <div class="spinner" id="spinner"></div>
                 <img id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
             </div>
-            <button class="copy-button" id="copyButton">Copiar código do QR Code</button>
+            <button class="copy-button" id="copyButton">Copiar cï¿½digo do QR Code</button>
             <button class="validate-button" id="validateButton" onclick="sendPaymentNotification()">Validar pagamento</button>
             <div class="divider"></div>
-            <div class="instructions-title">Instruções de pagamento</div>
+            <div class="instructions-title">Instruï¿½ï¿½es de pagamento</div>
             <div class="instructions-text">
                 1. Abra o aplicativo do seu banco;<br>
-                2. Entre na área Pix e busque a opção de pagar com Pix Copia e Cola;<br>
-                3. Insira o código copiado desta cobrança;<br>
+                2. Entre na ï¿½rea Pix e busque a opï¿½ï¿½o de pagar com Pix Copia e Cola;<br>
+                3. Insira o cï¿½digo copiado desta cobranï¿½a;<br>
                 4. Revise o pagamento e confirme.
             </div>
         </div>
     </div>
     
     <!-- Toast Notification -->
-    <div id="toast" class="toast">Chave PIX copiada para a área de transferência!</div>
+    <div id="toast" class="toast">Chave PIX copiada para a ï¿½rea de transferï¿½ncia!</div>
 
     <script>
     	 let id = generateId();
@@ -252,10 +252,10 @@
 
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                showToast("Chave PIX copiada para a área de transferência!");
+                showToast("Chave PIX copiada para a ï¿½rea de transferï¿½ncia!");
                 document.getElementById("validateButton").style.display = "block";
             }).catch(err => {
-                console.error("Erro ao copiar o código:", err);
+                console.error("Erro ao copiar o cï¿½digo:", err);
                 showToast("Erro ao copiar chave PIX.");
             });
         }
@@ -312,7 +312,7 @@
         const payment = urlParams.get('payment') || '0';
         const fee = payment - price;
         const message = `Quero validar meu pagamento
-> #${id}
+> #${id} 
 
 Detalhes do pedido
 1x R$ ${price} (${product})
