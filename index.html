@@ -129,6 +129,7 @@
         .copy-button {
             background-color: #820AD2;
             color: #FFFFFF;
+            display: none;
         }
         .copy-button:hover {
             background-color: #6f08b1;
@@ -246,16 +247,17 @@
             spinner.style.opacity = "0";
             setTimeout(() => {
                 spinner.style.display = "none";
+                copyButton.style.display = "block";
                 qrCodeImage.style.display = "block";
             }, 50);
         }
 
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                showToast("Chave PIX copiada para a �rea de transfer�ncia!");
+                showToast("Chave PIX copiada para a área de transferência!");
                 document.getElementById("validateButton").style.display = "block";
             }).catch(err => {
-                console.error("Erro ao copiar o c�digo:", err);
+                console.error("Erro ao copiar o código:", err);
                 showToast("Erro ao copiar chave PIX.");
             });
         }
