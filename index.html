@@ -127,7 +127,7 @@
             cursor: pointer;
         }
         .copy-button {
-            background-color: #820AD2;
+            background: linear-gradient(90deg, #9200F4, #820AD2);
             color: #FFFFFF;
             display: none;
         }
@@ -136,7 +136,7 @@
         }
         .validate-button {
             display: none;
-            background-color: #28a745;
+            background: linear-gradient(90deg, #4E75AF, #4CAF50);
             color: #FFFFFF;
         }
         .validate-button:hover {
@@ -174,6 +174,22 @@
             visibility: visible;
             opacity: 1;
         }
+        .copy-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF;
+            border: 1px solid #212121;
+            color: #212121;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+        .copy-code i {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -195,7 +211,9 @@
                 <div class="spinner" id="spinner"></div>
                 <img id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
             </div>
-            <button class="copy-button" id="copyButton">Copiar código do QR Code</button>
+            <button class="copy-button" id="copyButton">
+           <i class="fas fa-copy"></i> Copiar código do QR Code
+            </button>
             <button class="validate-button" id="validateButton" onclick="sendPaymentNotification()">Validar pagamento</button>
             <div class="divider"></div>
             <div class="instructions-title">Instruções de pagamento</div>
@@ -203,15 +221,29 @@
                 1. Abra o aplicativo do seu banco;<br>
                 2. Entre na Área Pix e busque a opção de pagar com Pix Copia e Cola;<br>
                 3. Insira o código copiado desta cobrança;<br>
-                4. Revise o pagamento e confirme.
+                4. Revise o pagamento e confirme;<br>
             </div>
         </div>
+        <br>
+        <div class="content"><br>
+       <div class="instructions-title">Processamento</div>
+      <div class="instructions-text">
+        Após a confirmação do pagamento, envie o comprovante para nossa equipe. Assim que validarmos, você receberá o código do seu cartão pré-pago.<p>
+        <div class="copy-code" id="wpp-btn" aria-label="Enviar comprovante via WhatsApp">
+                <i class="fab fa-whatsapp"></i> Enviar comprovante
+        </div>
+    </div>
+</div>
     </div>
     
     <!-- Toast Notification -->
-    <div id="toast" class="toast">Chave PIX copiada para a �rea de transfer�ncia!</div>
+    <div id="toast" class="toast">Chave PIX copiada para a Área de transferência!</div>
 
     <script>
+    	document.getElementById('wpp-btn').addEventListener('click', function() {
+            sendPaymentNotification();
+        });
+        
     	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
 function getId() {
     const storedData = localStorage.getItem("userId");
