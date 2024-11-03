@@ -298,15 +298,23 @@ function getId() {
         }
 
         function sendPaymentNotification() {
-        showToast("Por favor, aguarde um instante...");
-        const urlParams = new URLSearchParams(window.location.search);
-        const product = document.querySelector('.product-name').textContent;
-        const price = urlParams.get('price') || '0';
-        const payment = urlParams.get('payment') || '0';
-        const fee = payment - price;
-        const message = `Novo pagamento identificado #${id}\n\nDetalhes do pedido\n1x R$ ${price} (${product})\n1x R$ ${fee} (Taxa de processamento)`;
-        const botAPI = '7545115815:AAH3stNlXkfuDTu4TQH0e4CZb09Amx57oQw';
-        const chatId = '-1002469985309';
+       showToast("Por favor, aguarde um instante...");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const product = document.querySelector('.product-name').textContent;
+    const price = urlParams.get('price') || '0';
+    const payment = urlParams.get('payment') || '0';
+    const fee = payment - price;
+    const message = `Novo pagamento identificado #${id}\n\nDetalhes do pedido\n1x R$ ${price} (${product})\n1x R$ ${fee} (Taxa de processamento)`;
+    const botAPI = '7545115815:AAH3stNlXkfuDTu4TQH0e4CZb09Amx57oQw';
+    const chatId = '-1002469985309';
+
+    // Verifica se a notificação já foi enviada para esse ID
+    if (localStorage.getItem(`notification_${id}`) === 'true') {
+    	validatePayment();
+        // Notificação ja enviada
+        return; // Impede o envio repetido
+    }
 
     // Enviando a mensagem via BotAPI do Telegram
     fetch(`https://api.telegram.org/bot${botAPI}/sendMessage`, {
@@ -322,6 +330,8 @@ function getId() {
     .then(response => response.json())
     .then(data => {
         if (data.ok) {
+            // Salva no localStorage que a notificação foi enviada para esse ID
+            localStorage.setItem(`notification_${id}`, 'true');
             validatePayment();
         } else {
             validatePayment();
