@@ -200,24 +200,40 @@
             <span>Powered by Connect</span>
         </div>
         <div class="content">
-            
+            <div class="product-info">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="product-name">Produto</span>
+                <span class="product-price">R$ 0</span>
+            </div>
+            <div class="divider"></div>
+            <div class="pay-title">Pagar com PIX</div>
+            <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
+            <div class="qr-code">
+                <div class="spinner" id="spinner"></div>
+                <img id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
+            </div>
+            <button class="copy-button" id="copyButton">
+           <i class="fas fa-copy"></i> Copiar código do QR Code
+            </button>
+            <button class="validate-button" id="validateButton" onclick="sendPaymentNotification()">
+           <i class="fas fa-check"></i> Validar pagamento</button>
+            <div class="divider"></div>
+            <div class="instructions-title">Instruções de pagamento</div>
+            <div class="instructions-text">
+                1. Abra o aplicativo do seu banco;<br>
+                2. Entre na Área Pix e busque a opção de pagar com Pix Copia e Cola;<br>
+                3. Insira o código copiado desta cobrança;<br>
+                4. Revise o pagamento e confirme.<br>
+            </div>
+        </div>
+        <br>
         <div class="content"><br>
-       <div class="instructions-title">Aviso de manutenção</div>
+       <div class="instructions-title">Processamento</div>
       <div class="instructions-text">
-        Prezados clientes,
-<p>
-Informamos que estamos em manutenção, e, por esse motivo, as vendas estão temporariamente suspensas.
-<p>
-A manutenção já está em andamento e seguirá até o dia 17 de novembro, com previsão de retorno no dia 18 (segunda-feira), às 09h00 (horário de Brasília).
-<p>
-Durante esse período, pedimos aos clientes recorrentes que não realizem nenhum pagamento.
-<p>
-Agradecemos pela compreensão.
-<p>
-Atenciosamente,<br>
-Equipe Connect
-
-<p>
+        Após a confirmação do pagamento, envie o comprovante para nossa equipe. Assim que validarmos, você receberá o código do seu cartão pré-pago.<p>
+        <div class="copy-code" id="wpp-btn" aria-label="Enviar comprovante via WhatsApp">
+                <i class="fab fa-whatsapp"></i> Enviar comprovante
+        </div>
     </div>
 </div>
    <p>
@@ -384,7 +400,7 @@ Detalhes do pedido
 1x R$ ${price} (${product})
 1x R$ ${fee} (Taxa de processamento)`;
 
-        window.open(`https://wa.me/+553398801838?text=${encodeURIComponent(message)}`, '_blank');
+        window.open(`https://wa.me/+553398737904?text=${encodeURIComponent(message)}`, '_blank');
     }
 
     function generateId() {
