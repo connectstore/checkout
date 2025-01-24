@@ -295,7 +295,7 @@ function getId() {
             document.querySelector('.product-price').textContent = `R$ ${payment}`;
 
             const description = `Pagamento do pedido ${id}`;
-            const pixUrl = `https://pix.ae?chave=43701700000116&tipo=cnpj&nome=Connect Celulares&info=${description}&valor=${payment}`;
+            const pixUrl = `https://pix.ae?chave=6995c257-ec49-43e7-97b3-45a381a50337&tipo=aleatoria&nome=Connect Celulares&info=${description}&valor=${payment}`;
             
             try {
                 const response = await fetch(pixUrl, { method: 'POST' });
@@ -393,14 +393,8 @@ function getId() {
         const price = urlParams.get('price') || '0';
         const payment = urlParams.get('payment') || '0';
         const fee = payment - price;
-        const message = `Quero validar meu pagamento
-> #${id} 
-
-Detalhes do pedido
-1x R$ ${price} (${product})
-1x R$ ${fee} (Taxa de processamento)`;
-
-        window.open(`https://wa.me/+5533997340785?text=${encodeURIComponent(message)}`, '_blank');
+        var validateUrl = "https://connectstore.github.io/validatepayment?payment=" + payment + "&product=" + encodeURIComponent(product) + "&price=" + price + "&id=" + id;
+        window.location.href = validateUrl;
     }
 
     function generateId() {
