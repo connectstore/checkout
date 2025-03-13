@@ -205,6 +205,7 @@
                 <span class="product-price">R$ 0</span>
             </div>
             <div class="divider"></div>
+            
             <div class="pay-title">Pagar com PIX</div>
             <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
             <div class="qr-code">
@@ -254,7 +255,7 @@
         });
         
     	document.getElementById('wpp-btn').addEventListener('click', function() {
-            sendPaymentNotification();
+            validatePayment();
         });
         
     	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
