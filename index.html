@@ -218,6 +218,9 @@ Atenciosamente,<br>
 Equipe Connect
 
 <p>
+	<div class="copy-code" id="shopee-btn" aria-label="Compre via Shopee">
+                <i class="fas fa-external-link-alt"></i> Comprar via Shopee
+        </div>
     </div>
 </div>
    <p>
@@ -238,6 +241,10 @@ Equipe Connect
          }
         });
         
+        document.getElementById("shopee-btn").addEventListener("click", function () {
+        window.open("https://s.shopee.com.br/1LSG4EevXH", "_blank");
+        });
+  
     	document.getElementById('wpp-btn').addEventListener('click', function() {
             sendPaymentNotification();
         });
