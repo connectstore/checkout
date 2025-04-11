@@ -136,7 +136,6 @@
             background-color: #6f08b1;
         }
         .validate-button {
-            display: none;
             background: linear-gradient(90deg, #4E75AF, #4CAF50);
             color: #FFFFFF;
         }
@@ -200,26 +199,40 @@
             <span>Powered by Connect</span>
         </div>
         <div class="content">
+            <div class="product-info">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="product-name">Produto</span>
+                <span class="product-price">R$ 0</span>
+            </div>
+            <div class="divider"></div>
             
+            <div class="pay-title">Pagar com PIX</div>
+            <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
+            <div class="qr-code">
+                <div class="spinner" id="spinner"></div>
+                <img id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
+            </div>
+            <button class="copy-button" id="copyButton">
+           <i class="fas fa-copy"></i> Copiar código do QR Code
+            </button>
+            <button class="validate-button" id="validateButton" onclick="validatePayment()">
+           <i class="fas fa-check"></i> Já pagou? Toque aqui!</button>
+            <div class="divider"></div>
+            <div class="instructions-title">Instruções de pagamento</div>
+            <div class="instructions-text">
+                1. Abra o aplicativo do seu banco;<br>
+                2. Entre na Área Pix e busque a opção de pagar com Pix Copia e Cola;<br>
+                3. Insira o código copiado desta cobrança;<br>
+                4. Revise o pagamento e confirme.<br>
+            </div>
+        </div>
+        <br>
         <div class="content"><br>
-       <div class="instructions-title">Aviso de manutenção</div>
+       <div class="instructions-title">Processamento</div>
       <div class="instructions-text">
-        Prezados clientes,
-<p>
-Informamos que estamos em manutenção, e, por esse motivo, as vendas estão temporariamente suspensas.
-<p>
-A manutenção já está em andamento e seguirá até o dia 11 de abril, com previsão de retorno  às 09h00 (horário de Brasília).
-<p>
-Durante esse período, pedimos aos clientes recorrentes que não realizem nenhum pagamento.
-<p>
-Agradecemos pela compreensão.
-<p>
-Atenciosamente,<br>
-Equipe Connect
-
-<p>
-	<div class="copy-code" id="shopee-btn" aria-label="Compre via Shopee">
-                <i class="fas fa-external-link-alt"></i> Comprar via Shopee
+        Após a confirmação do pagamento, envie o comprovante para nossa equipe. Assim que validarmos, você receberá o código do seu cartão pré-pago.<p>
+        <div class="copy-code" id="wpp-btn" aria-label="Enviar comprovante via WhatsApp">
+                <i class="fab fa-whatsapp"></i> Enviar comprovante
         </div>
     </div>
 </div>
@@ -241,12 +254,8 @@ Equipe Connect
          }
         });
         
-        document.getElementById("shopee-btn").addEventListener("click", function () {
-        window.open("https://s.shopee.com.br/1LSG4EevXH", "_blank");
-        });
-  
     	document.getElementById('wpp-btn').addEventListener('click', function() {
-            sendPaymentNotification();
+            validatePayment();
         });
         
     	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
@@ -286,7 +295,7 @@ function getId() {
             document.querySelector('.product-price').textContent = `R$ ${payment}`;
 
             const description = `Pagamento do pedido ${id}`;
-            const pixUrl = `https://pix.ae?chave=43701700000116&tipo=cnpj&nome=Connect Celulares&info=${description}&valor=${payment}`;
+            const pixUrl = `https://pix.ae?chave=273f1e08-4f4d-49db-81f8-8691cd735176&tipo=aleatoria&nome=Connect Celulares&info=${description}&valor=${payment}`;
             
             try {
                 const response = await fetch(pixUrl, { method: 'POST' });
@@ -384,14 +393,8 @@ function getId() {
         const price = urlParams.get('price') || '0';
         const payment = urlParams.get('payment') || '0';
         const fee = payment - price;
-        const message = `Quero validar meu pagamento
-> #${id} 
-
-Detalhes do pedido
-1x R$ ${price} (${product})
-1x R$ ${fee} (Taxa de processamento)`;
-
-        window.open(`https://wa.me/+553398801838?text=${encodeURIComponent(message)}`, '_blank');
+        var validateUrl = "https://connectstore.github.io/validatepayment?payment=" + payment + "&product=" + encodeURIComponent(product) + "&price=" + price + "&id=" + id;
+        window.location.href = validateUrl;
     }
 
     function generateId() {
