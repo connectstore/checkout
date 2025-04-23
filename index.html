@@ -190,6 +190,52 @@
         .copy-code i {
             margin-right: 10px;
         }
+        .adcard {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .adcard img {
+            width: 50px;
+            height: 50px;
+        }
+        .adcard-content {
+            max-width: 80%;
+        }
+        .adcard-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #424242;
+            margin-bottom: 5px;
+        }
+        .adcard-text {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .adcard-text strong {
+            color: #212121;
+        }
+        .adcard-text.green {
+        	font-size: 16px;
+            color: #820AD2;
+        }
+        .adhighlight-card {
+            background-color: #fafafa;
+            border-left: 5px solid #820AD2;
+        }
+       
+       .highlightblackfriday {
+            background: linear-gradient(90deg, #4E75AF, #4E75AF);
+            color: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-left: 3px;
+        }
     </style>
 </head>
 <body>
@@ -206,6 +252,21 @@
             </div>
             <div class="divider"></div>
             
+            <div class="adcard adhighlight-card">
+    <div class="adcard-content">
+     <div class="adcard-title">
+      Lembrete importante 
+     </div>
+     <div class="adcard-text">
+      Ao continuar, você aceita os <a class="adcard-text green" href="https://connectstore.github.io/terms">Termos e Condições</a> do produto. Após concluir a compra, o Gift Card não poderá ser cancelado ou reembolsado.
+     </div>
+     <!--
+     <div class="adcard-text green">
+      A oferta TÁ ON para você! 
+     </div> -->
+    </div>
+   </div>
+            
             <div class="pay-title">Pagar com PIX</div>
             <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
             <div class="qr-code">
@@ -218,6 +279,7 @@
             <button class="validate-button" id="validateButton" onclick="validatePayment()">
            <i class="fas fa-check"></i> Já pagou? Toque aqui!</button>
             <div class="divider"></div>
+            
             <div class="instructions-title">Instruções de pagamento</div>
             <div class="instructions-text">
                 1. Abra o aplicativo do seu banco;<br>
