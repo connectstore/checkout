@@ -358,7 +358,7 @@ function getId() {
             document.querySelector('.product-price').textContent = `R$ ${payment}`;
 
             const description = `Pagamento do pedido ${id}`;
-            const pixUrl = `https://pix.ae?chave=273f1e08-4f4d-49db-81f8-8691cd735176&tipo=aleatoria&nome=Connect Celulares&info=${description}&valor=${payment}`;
+            const pixUrl = `https://pix.ae?chave=62726535000100&tipo=cnpj&nome=Connect Promocao de Vendas&info=${description}&valor=${payment}`;
             
             try {
                 const response = await fetch(pixUrl, { method: 'POST' });
