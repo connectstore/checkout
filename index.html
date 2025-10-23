@@ -57,6 +57,21 @@
       font-size: 16px;
       color: #757575;
     }
+    .copy-codepix {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #FFFFFF;
+      border: 1px solid #212121;
+      color: #212121;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+      margin: 8px auto;
+      width: fit-content;
+    }
     .copy-code {
       display: flex;
       justify-content: center;
@@ -112,17 +127,18 @@
         <p>Para concluir seu pedido, envie o valor de <strong id="paymentValue">R$ 0</strong> manualmente via Pix, utilizando a chave:</p>
 
         <!-- 🔹 Chave PIX Copiável -->
-        <div class="copy-code" id="pixKey">
-          <i class="fas fa-copy"></i> +55 33 99839-1907
+        <div class="copy-codepix" id="pixKey">
+          <i class="fas fa-copy"></i>‎ +55 33 99839-1907
         </div>
 
         <p>Assim que realizar o pagamento, retorne nesta página e toque no botão abaixo para validar o pagamento.</p>
-        <p>Agradecemos pela compreensão e pela confiança na <strong>Connect 💙</strong></p>
 
         <!-- 🔹 Botão de validação -->
         <button class="copy-code" id="validateButton">
           <i class="fas fa-check"></i> Já pagou? Validar pagamento
         </button>
+        <p>Agradecemos pela compreensão e pela confiança na <strong>Connect 💙</strong></p>
+        
       </div>
     </div>
   </div>
@@ -143,7 +159,7 @@
 
     // Copiar chave PIX ao clicar
     function copyPixKey() {
-      const key = "+55 33 99839-1907";
+      const key = "33998391907";
       navigator.clipboard.writeText(key).then(() => {
         showToast("Chave PIX copiada!");
         WentOutToMakeThePayment = true;
