@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento com PIX</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -272,7 +273,7 @@
             <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
             <div class="qr-code">
                 <div class="spinner" id="spinner"></div>
-                <img id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
+                <img class="qr-code img" id="qrCodeImage" src="default_qr.png" alt="QR Code" onload="hideSpinner()">
             </div>
             <button class="copy-button" id="copyButton">
            <i class="fas fa-copy"></i> Copiar código do QR Code
@@ -306,6 +307,57 @@
     <div id="toast" class="toast">Chave PIX copiada para a Área de transferência!</div>
 
     <script>
+    	// Gerar PIX
+    	function tlv(tag, value){const v=String(value||"");return tag+String(v.length).padStart(2,"0")+v;}
+
+function crc16(payload){
+  let pol=0x1021,crc=0xffff;
+  for(let i=0;i<payload.length;i++){
+    crc^=payload.charCodeAt(i)<<8;
+    for(let j=0;j<8;j++){
+      crc=(crc&0x8000)?((crc<<1)^pol):(crc<<1);crc&=0xffff;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4,"0");
+}
+function normalizePhone(phone){
+  let cleaned=phone.replace(/\D/g,"");
+  if(cleaned.startsWith("55")) return "+"+cleaned;
+  if(cleaned.length===11) return "+55"+cleaned;
+  if(cleaned.length===13 && cleaned.startsWith("55")) return "+"+cleaned;
+  return phone.trim();
+}
+function buildMerchantAccountInfo(pixKey){
+  const gui=tlv("00","br.gov.bcb.pix");
+  const keyField=tlv("01",pixKey);
+  const combined=gui+keyField;
+  return "26"+String(combined.length).padStart(2,"0")+combined;
+}
+function buildBRCode({pixKey,nome,cidade,valor,info}){
+  let payload="";
+  payload+=tlv("00","01");
+  payload+=buildMerchantAccountInfo(pixKey);
+  payload+=tlv("52","0000");
+  payload+=tlv("53","986");
+  if(valor){let val=String(valor).replace(",",".").replace(/[^0-9.]/g,"");payload+=tlv("54",val);}
+  payload+=tlv("58","BR");
+  payload+=tlv("59",(nome||"NOME").toUpperCase().slice(0,25));
+  payload+=tlv("60",(cidade||"SAO PAULO").toUpperCase().slice(0,15));
+  if(info) payload+=tlv("62",tlv("05",info));
+  const crc=crc16(payload+"6304");
+  payload+=tlv("63",crc);
+  return payload;
+}
+
+// Dados padrão
+const defaultData={
+  chave: "33998391907",
+  tipo: "celular",
+  nome: "Connect Celulares",
+  info: "Test",
+  valor: "1.00",
+  cidade: "SAO PAULO"
+};
     	let WentOutToMakeThePayment = false;
     
     	document.addEventListener("visibilitychange", function() {
@@ -358,19 +410,40 @@ function getId() {
             document.querySelector('.product-price').textContent = `R$ ${payment}`;
 
             const description = `Pagamento do pedido ${id}`;
-            const pixUrl = `https://pix.brdevelopers.store/?chave=33998391907&tipo=celular&nome=Connect Celulares&info=${description}&valor=${payment}`;
             
-            try {
-                const response = await fetch(pixUrl, { method: 'POST' });
-                const data = await response.json();
+  const params=new URLSearchParams(window.location.search);
+  let chave=params.get("chave")||defaultData.chave;
+  const tipo=params.get("tipo")||defaultData.tipo;
+  const nome=params.get("nome")||defaultData.nome;
+  const info=`${id}`;
+  const valor=params.get("payment")||defaultData.valor;
+  const cidade=params.get("cidade")||defaultData.cidade;
 
-                if (data.status === 'success') {
-                    document.getElementById("qrCodeImage").src = data.qrbase64;
-                    document.getElementById("copyButton").onclick = () => copyToClipboard(data.qrstring);
-                } 
-            } catch (error) {
-                console.error("Erro ao obter QR Code:", error);
-            }
+  if(tipo.toLowerCase()==="celular") chave=normalizePhone(chave);
+
+  const payload=buildBRCode({pixKey:chave,nome,cidade,valor,info});
+
+  // Cria canvas temporário para gerar QR Code
+  const tempCanvas=document.createElement("canvas");
+  new QRCode(tempCanvas,{text: payload, width:300, height:300, correctLevel:QRCode.CorrectLevel.H});
+  await new Promise(resolve=>setTimeout(resolve,50)); // espera renderização
+
+  // Coloca imagem do canvas direto no <img>
+  const qrImg=document.getElementById("qrCodeImage");
+  qrImg.src=tempCanvas.querySelector("canvas") ? tempCanvas.querySelector("canvas").toDataURL("image/png") : tempCanvas.toDataURL("image/png");
+
+  const idfatura=btoa(payload);
+  const urlpixae=`/fatura/${idfatura}`;
+
+  const data={
+    status:"success",
+    qrstring:payload,
+    idfatura,
+    urlpixae
+  };
+
+  // Configura botão copiar
+  document.getElementById("copyButton").onclick = () => copyToClipboard(data.qrstring);
         }
 
         function hideSpinner() {
