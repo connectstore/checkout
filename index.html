@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pagamento com PIX</title>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -191,52 +193,26 @@
         .copy-code i {
             margin-right: 10px;
         }
-        .adcard {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .adcard img {
-            width: 50px;
-            height: 50px;
-        }
-        .adcard-content {
-            max-width: 80%;
-        }
-        .adcard-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #424242;
-            margin-bottom: 5px;
-        }
-        .adcard-text {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        .adcard-text strong {
-            color: #212121;
-        }
-        .adcard-text.green {
-        	font-size: 16px;
-            color: #820AD2;
-        }
-        .adhighlight-card {
-            background-color: #fafafa;
-            border-left: 5px solid #820AD2;
-        }
-       
-       .highlightblackfriday {
-            background: linear-gradient(90deg, #4E75AF, #4E75AF);
-            color: #FFFFFF;
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin-left: 3px;
-        }
+        .notify {
+    display: flex;                  /* Para alinhar ícone e texto horizontalmente */
+    justify-content: center;        /* Centraliza conteúdo interno */
+    align-items: center;            /* Alinha verticalmente */
+    background-color: #FFFFFF;
+    border: 1px solid #212121;
+    color: #212121;                 /* Cor do texto e ícones */
+    border-radius: 8px;             /* Levemente arredondado (ajuste o valor para mais/menos) */
+    padding: 12px 20px;             /* Espaçamento interno para parecer um botão */
+    margin: 20px auto;              /* Centraliza horizontalmente no container pai */
+    width: fit-content;             /* Ajusta largura ao conteúdo */
+    cursor: pointer;                /* Muda o cursor para indicar clicável */
+    font-size: 16px;                /* Tamanho de texto legível */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transição suave para hover */
+}
+
+.notify i {
+    margin-right: 10px;             /* Espaço entre ícone e texto */
+    font-size: 18px;                /* Ícone ligeiramente maior */
+}
     </style>
 </head>
 <body>
@@ -245,29 +221,13 @@
             <i class="fas fa-lock"></i>
             <span>Powered by Connect</span>
         </div>
-        <div class="content">
+        <div id="checkout" class="content">
             <div class="product-info">
                 <i class="fas fa-shopping-bag"></i>
                 <span class="product-name">Produto</span>
                 <span class="product-price">R$ 0</span>
             </div>
             <div class="divider"></div>
-            
-            <!--
-            <div class="adcard adhighlight-card">
-    <div class="adcard-content">
-     <div class="adcard-title">
-      Lembrete importante 
-     </div>
-     <div class="adcard-text">
-      Ao continuar, você aceita os <a class="adcard-text green" href="https://connectstore.github.io/terms">Termos e Condições</a> do produto. Após concluir a compra, o Gift Card não poderá ser cancelado ou reembolsado.
-     </div>
-     
-     <div class="adcard-text green">
-      A oferta TÁ ON para você! 
-     </div> 
-    </div>
-   </div>-->
             
             <div class="pay-title">Pagar com PIX</div>
             <div class="pay-instructions">Escaneie o QR Code ou Copie a Chave</div>
@@ -291,22 +251,79 @@
             </div>
         </div>
         <br>
-        <div class="content"><br>
-       <div class="instructions-title">Processamento</div>
-      <div class="instructions-text">
-        Após a confirmação do pagamento, envie o comprovante para nossa equipe. Assim que validarmos, você receberá o código do seu cartão pré-pago.<p>
-        <div class="copy-code" id="wpp-btn" aria-label="Enviar comprovante via WhatsApp">
-                <i class="fab fa-whatsapp"></i> Enviar comprovante
-        </div>
-    </div>
+        
+        <div id="status" class="content">
+       <br>
+       <div id="status_title" class="instructions-title">Manutenção</div>
+      <div id="status_description" class="instructions-text">
+      Estamos em manutenção, retornaremos em breve.
+      </div>
+      <div class="notify" id="suporte-btn">
+      <i class="fab fa-whatsapp"></i> Me avise quando voltar 
+  </div>
 </div>
-   <p>
-    </div>
     
     <!-- Toast Notification -->
     <div id="toast" class="toast">Chave PIX copiada para a Área de transferência!</div>
 
     <script>
+       // Status da loja
+const firebaseConfig = {
+  apiKey: "AIzaSyD3IFvrVGj5670SJOYGjcSrdOYFUZsLa0s",
+  authDomain: "connect-82368.firebaseapp.com",
+  databaseURL: "https://connect-82368-default-rtdb.firebaseio.com",
+  projectId: "connect-82368",
+  storageBucket: "connect-82368.firebasestorage.app",
+  messagingSenderId: "98244889601",
+  appId: "1:98244889601:web:1b2fa3f00a40488a534400",
+  measurementId: "G-RY248RK6E7"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+const statusRef = db.ref("rules/app/admin/status");
+
+statusRef.on("value", snapshot => {
+  const status = snapshot.val() ?? "Status não definido"; // Trata null ou undefined
+
+  const checkoutDiv = document.getElementById("checkout");
+  const statusDiv = document.getElementById("status");
+
+  if (status === "online") {
+    fetchPixData();
+    checkoutDiv.style.display = "block"; // Exibe checkout (assumindo display original como 'block')
+    statusDiv.style.display = "none";    // Oculta status
+  } else {
+    checkoutDiv.style.display = "none";  // Oculta checkout
+    statusDiv.style.display = "block";   // Exibe status
+
+    // Atualiza os textos baseados no status
+    let title = "";
+    let description = "";
+
+    switch (status) {
+      case "offline":
+        title = "Estamos fechados";
+        description = "Prezados clientes,\n\n Informamos que estamos fora do horário de funcionamento no momento.\n\n A loja não está aberta agora. Nosso atendimento ocorre de segunda a sábado, das 09h às 18h.\n\n Retornaremos às 09h.\n\n Caso deseje ser notificado quando voltarmos, utilize o botão abaixo para receber uma notificação.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        break;
+      case "maintenance":
+        title = "Manutenção temporária";
+        description = "Prezados clientes,\n\n Informamos que estamos em manutenção e, por esse motivo, as vendas estão temporariamente suspensas.\n\n A manutenção já está em andamento.\n\n Durante esse período, pedimos aos clientes recorrentes que não realizem nenhum pagamento.\n\n Caso deseje ser notificado, utilize o botão abaixo para receber uma notificação assim que a manutenção for finalizada.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        break;
+      case "outside_of_business_hours":
+        title = "Horário de almoço ";
+        description = "Prezados clientes,\n\n Informamos que estamos em horário de almoço no momento.\n\n Nossos atendimentos e vendas retornarão nos próximos 45 minutos.\n\n Caso deseje ser notificado quando retornarmos, utilize o botão abaixo para receber uma notificação.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        break;
+      default:
+        title = "Status Desconhecido";
+        description = "O status atual não foi reconhecido. Por favor, contate o suporte.";
+    }
+
+    document.getElementById("status_title").innerText = title;
+    document.getElementById("status_description").innerText = description;
+  }
+});
     	// Gerar PIX
     	function tlv(tag, value){const v=String(value||"");return tag+String(v.length).padStart(2,"0")+v;}
 
@@ -369,9 +386,10 @@ const defaultData={
          }
         });
         
-    	document.getElementById('wpp-btn').addEventListener('click', function() {
-            validatePayment();
-        });
+        document.getElementById("suporte-btn").onclick = function() {
+        var supporturl = "https://wa.me/5533999449469?text=Quero%20ser%20notificado%20quando%20a%20loja%20voltar";
+        window.location.href = supporturl;
+        };
         
     	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
 function getId() {
@@ -537,7 +555,7 @@ function getId() {
             return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
 
-    window.onload = fetchPixData;
+   //window.onload = fetchPixData;
     </script>
 </body>
 </html>
