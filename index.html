@@ -258,6 +258,9 @@
       <div id="status_description" class="instructions-text">
       Estamos em manutenção, retornaremos em breve.
       </div>
+      <div class="notify" id="buy-now">
+      <i class="fa fa-arrow-up-right-from-square"></i> Comprar agora
+    </div>
       <div class="notify" id="suporte-btn">
       <i class="fab fa-whatsapp"></i> Me avise quando voltar 
   </div>
@@ -305,7 +308,7 @@ statusRef.on("value", snapshot => {
     switch (status) {
       case "offline":
         title = "Estamos fechados";
-        description = "Prezados clientes,\n\n Informamos que estamos fora do horário de funcionamento no momento.\n\n A loja não está aberta agora. Nosso atendimento ocorre de segunda a sábado, das 09h às 18h.\n\n Retornaremos às 09h.\n\n Caso deseje ser notificado quando voltarmos, utilize o botão abaixo para receber uma notificação.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        description = "Prezados clientes,\n\nInformamos que estamos fora do horário de funcionamento no momento.\n\nO atendimento manual não está disponível agora. Nosso atendimento ocorre de segunda a sábado, das 09h às 18h.\n\nRetornaremos às 09h.\n\nEnquanto isso, você pode realizar sua compra de forma automática pelo nosso site, utilizando o botão Comprar agora, com atendimento disponível 24 horas por dia.\n\nCaso deseje ser notificado quando voltarmos, utilize o botão abaixo para receber uma notificação.\n\nAgradecemos pela compreensão.\n\nAtenciosamente,\nEquipe Connect";
         break;
       case "maintenance":
         title = "Manutenção temporária";
@@ -313,7 +316,7 @@ statusRef.on("value", snapshot => {
         break;
       case "outside_of_business_hours":
         title = "Horário de almoço ";
-        description = "Prezados clientes,\n\n Informamos que estamos em horário de almoço no momento.\n\n Nossos atendimentos e vendas retornarão nos próximos 45 minutos.\n\n Caso deseje ser notificado quando retornarmos, utilize o botão abaixo para receber uma notificação.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        description = "Prezados clientes,\n\nInformamos que estamos em horário de almoço no momento.\n\nNossos atendimentos e vendas retornarão nos próximos 45 minutos.\n\nEnquanto isso, lembramos que temos nosso site com atendimento automático disponível 24 horas por dia.\n\nCaso não queira esperar, você pode utilizar o botão Comprar agora e realizar sua compra diretamente pelo site, de forma rápida e segura.\n\nSe preferir, utilize o botão abaixo para ser notificado assim que retornarmos.\n\nAgradecemos pela compreensão.\n\nAtenciosamente,\nEquipe Connect";
         break;
       default:
         title = "Status Desconhecido";
@@ -389,6 +392,11 @@ const defaultData={
         document.getElementById("suporte-btn").onclick = function() {
         var supporturl = "https://wa.me/5533999449469?text=Quero%20ser%20notificado%20quando%20a%20loja%20voltar";
         window.location.href = supporturl;
+        };
+        
+        document.getElementById("buy-now").onclick = function() {
+        var buynow = "https://connectstore.centralcart.com.br";
+        window.location.href = buynow;
         };
         
     	 // Função para gerar e salvar a id se ela ainda não existir ou se já tiver expirado
