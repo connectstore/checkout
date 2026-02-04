@@ -259,10 +259,10 @@
       Estamos em manutenção, retornaremos em breve.
       </div>
       <div class="notify" id="buy-now">
-      <i class="fa fa-arrow-up-right-from-square"></i> Comprar agora
+      <i class="fa fa-arrow-up-right-from-square"></i> Conhecer novo site
     </div>
       <div class="notify" id="suporte-btn">
-      <i class="fab fa-whatsapp"></i> Me avise quando voltar 
+      <i class="fab fa-whatsapp"></i> Preciso de ajuda 
   </div>
 </div>
     
@@ -311,8 +311,8 @@ statusRef.on("value", snapshot => {
         description = "Prezados clientes,\n\nInformamos que estamos fora do horário de funcionamento no momento.\n\nO atendimento manual não está disponível agora. Nosso atendimento ocorre de segunda a sábado, das 09h às 18h.\n\nRetornaremos às 09h.\n\nEnquanto isso, você pode realizar sua compra de forma automática pelo nosso site, utilizando o botão Comprar agora, com atendimento disponível 24 horas por dia.\n\nCaso deseje ser notificado quando voltarmos, utilize o botão abaixo para receber uma notificação.\n\nAgradecemos pela compreensão.\n\nAtenciosamente,\nEquipe Connect";
         break;
       case "maintenance":
-        title = "Manutenção temporária";
-        description = "Prezados clientes,\n\n Informamos que estamos em manutenção e, por esse motivo, as vendas estão temporariamente suspensas.\n\n A manutenção já está em andamento.\n\n Durante esse período, pedimos aos clientes recorrentes que não realizem nenhum pagamento.\n\n Caso deseje ser notificado, utilize o botão abaixo para receber uma notificação assim que a manutenção for finalizada.\n\n Agradecemos pela compreensão.\n\n Atenciosamente,\n Equipe Connect";
+        title = "Estamos de casa nova 🚀";
+        description = "Estamos migrando para um novo site,\ncom infraestrutura aprimorada,\n\nentrega automática de Gift Cards\ne suporte 24h para te atender ainda melhor.\n\nPara comprar, é só clicar no botão\n\"Conhecer novo site\".";
         break;
       case "outside_of_business_hours":
         title = "Horário de almoço ";
@@ -390,7 +390,7 @@ const defaultData={
         });
         
         document.getElementById("suporte-btn").onclick = function() {
-        var supporturl = "https://wa.me/5533999449469?text=Quero%20ser%20notificado%20quando%20a%20loja%20voltar";
+        var supporturl = "https://wa.me/5533999449469?text=Preciso%20de%20ajuda";
         window.location.href = supporturl;
         };
         
